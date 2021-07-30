@@ -22,4 +22,4 @@ Comment.belongsTo(User, {
 })
 
 module.exports = { 
-User, Comment, BlogPost };
+User, Comment, Post };
