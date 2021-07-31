@@ -43,7 +43,7 @@ User.init(
     timestamps: false,
     underscored: true,
     freezeTableName: true,
-    modelName: 'User',
+    modelName: 'user',
   }
 );
 

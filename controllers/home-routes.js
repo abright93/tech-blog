@@ -1,62 +1,82 @@
 const router = require("express").Router();
 const { Post, Comment, User } = require("../models");
+const withAuth = require('../utils/auth');
 
 
-router.get('/', (req, res) => {
-  Post.findAll({
-    include: [User],
-  })
-    .then((dbPostData) => {
-      const posts = dbPostData.map((post) => post.get({ plain: true }));
+router.get('/',async (req, res) => {
+  try {
+      const postData = await Post.findAll({
+      include: [{ model: Comment },
+                { model: User }],
+      });
+      const posts = postData.map((post) =>
+      post.get({ plain: true })
+      );
 
-      res.render("post-info", { posts });
-    })
-    .catch((err) => {
+res.render('all', {posts, loggedIn: req.session.loggedIn });
+  } catch (err) {
+      console.log(err);
       res.status(500).json(err);
-    });
+  }
 });
 
+router.get('/dash', withAuth , async (req, res) => {
+  try {
+      const postData = await Post.findAll({
+      where: { user_id: req.session.userId },
+      include: [{ model: Comment },
+                { model: User }],
+      });
+      const posts = postData.map((post) =>
+      post.get({ plain: true })
+      );
 
-router.get('/post/:id', (req, res) => {
-  Post.findByPk(req.params.id, {
-    include: [
-      User,
-      {
-        model: Comment,
-        include: [User],
-      },
-    ],
-  })
-    .then((dbPostData) => {
-      if (dbPostData) {
-        const post = dbPostData.get({ plain: true });
-
-        res.render('comments', { post });
-      } else {
-        res.status(404).end();
-      }
-    })
-    .catch((err) => {
+res.render('dash', {posts, loggedIn: req.session.loggedIn});
+  } catch (err) {
+      console.log(err);
       res.status(500).json(err);
-    });
-});
-
-router.get('/login', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect("/");
-    return;
   }
-
-  res.render('login');
 });
 
-router.get('/signup', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/');
-    return;
+router.get('/dash/edit/:id', withAuth , async (req, res) => {
+  try {
+      const commentData = await Post.findByPk(req.params.id, {
+          include: [{ model: User }],
+      });
+      const dataObj = commentData.get({plain:true});
+
+res.render('editPost', {...dataObj, loggedIn: req.session.loggedIn} );
+  } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
   }
-
-  res.render('signup');
 });
 
+router.get('/dash/new', withAuth , async (req, res) => {
+res.render('newPost', {loggedIn: req.session.loggedIn});
+});
+
+router.get('/comment/:id', async (req, res) => {
+  try {
+      const commentData = await Post.findByPk(req.params.id, {
+      include: [{ model: Comment },
+                { model: User },
+                { model: User }],
+      });
+      const dataObj = commentData.get({plain:true});
+
+res.render('comment', {...dataObj, loggedIn: req.session.loggedIn} );
+  } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+  }
+});
+
+router.get('/signup', async (req, res) => {
+res.render('signup', {loggedIn: req.session.loggedIn});
+});
+
+router.get('/login', async (req, res) => {
+res.render('login', {loggedIn: req.session.loggedIn});
+});
 module.exports = router;

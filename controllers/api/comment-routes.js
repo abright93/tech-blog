@@ -1,11 +1,19 @@
-const router = require('express').Router();
+const router = require("express").Router();
+const { Comment } = require("../../models");
 
-const postRoutes = require('./post-routes');
-const commentRoutes = require('./comment-routes');
-const userRoutes = require('./user-routes.js');
+router.post('/', async (req, res) => {
+  try {
+      const postData = await Comment.create({
+          content: req.body.content,
+          user_id: req.session.userId,
+          post_id: req.body.post_id,
+      });
 
-router.use('/post', postRoutes);
-router.use('/comment', commentRoutes);
-router.use('/user', userRoutes);
+      res.status(200).json(postData);
+  } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+  }
+});
 
 module.exports = router;
