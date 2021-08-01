@@ -29,7 +29,7 @@ router.delete("/user/:id", (req, res) => {
   })
   .then(dbUserData => {
     if (!dbUserData) {
-      res.status(404).json({ message: 'No user found with this id' });
+      res.status(404).json({ message: 'User not found with this ID' });
       return;
     }
     res.json(dbUserData);
@@ -47,7 +47,7 @@ router.post("/login", (req, res) => {
     }
   }).then(dbUserData => {
     if (!dbUserData) {
-      res.status(400).json({ message: 'No user account found!' });
+      res.status(400).json({ message: 'User account not found!' });
       return;
     }
 
