@@ -1,37 +1,48 @@
-async function editPostHandler(event) {
-  event.preventDefault();
-  
-  const title = document.querySelector("#post-title").innerHTML;
-  const body = document.querySelector("#post-body").innerHTML;
-  const post_id = window.location.toString().split("/")[
-    window.location.toString().split("/").length - 1
-  ];
-  console.log(title, body);
-  document.location.replace("/edit/" + post_id);
-}
+const postId = document.querySelector('input[name="post-id"]').value;
 
-async function deletePostHandler(event) {
+console.log(postId);
+console.log("testing");
+
+const editFormHandler = async (event) => {
   event.preventDefault();
-  const post_id = window.location.toString().split("/")[
-    window.location.toString().split("/").length - 1
-  ];
-  const response = await fetch("/api/posts/" + post_id, {
-    method: "DELETE",
+
+  const postContent = document.querySelector('textarea[name="post-body"]').value;
+  const postTitle = document.querySelector('input[name="post-title"]').value;
+  
+  console.log(postContent);
+  console.log(postTitle);
+
+  const response = await fetch(`/api/post/${postId}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      postTitle,
+      postContent,
+    }),
     headers: {
-      "Content-Type": "application/json",
-    },
+      'Content-Type': 'application/json'
+    }
   });
 
+  console.log(response);
   if (response.ok) {
-    document.location.replace("/dashboard");
+    document.location.replace('/dashboard');
   } else {
-    alert(response.statusText);
+    alert('Failed to update your post');
   }
-}
+  document.location.replace('/dashboard');
+};
+
+const deleteClickHandler = async () => {
+  await fetch(`/api/post/${postId}`, {
+    method: 'DELETE'
+  });
+
+  document.location.replace('/dashboard');
+};
 
 document
-.querySelector("#edit-btn")
-.addEventListener("click", editPostHandler);
+  .querySelector('#edit-post-form')
+  .addEventListener('submit', editFormHandler);
 document
-.querySelector("#delete-btn")
-.addEventListener("click", deletePostHandler);
+  .querySelector('#delete-btn')
+  .addEventListener('click', deleteClickHandler);
