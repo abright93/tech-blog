@@ -1,3 +1,21 @@
+.wrapper {
+  padding: 20px;
+  align-content: right;
+}  
+
+.single-post-padding {
+  padding: 50px;
+}
+
+.post-text-padding {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+#comment-form {
+  margin-top: 20px;
+  margin-bottom: 20px;          
+}                  
 * {
   margin: 0;
 }
@@ -49,23 +67,3 @@ a {
 .padding-20 {
   padding: 20;
 }  
-
-.wrapper {
-  padding: 20px;
-  align-content: right;
-}  
-
-.single-post-padding {
-  padding: 50px;
-}
-
-.post-text-padding {
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
-#comment-form {
-  margin-top: 20px;
-  margin-bottom: 20px;          
-}                  
-  
