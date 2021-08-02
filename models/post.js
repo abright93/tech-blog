@@ -11,28 +11,35 @@ Post.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    title: {
+    postTitle: {
+      type: DataTypes.STRING(25),
+      allowNull: false,
+      unique: true,
+    },
+    postContent: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
-    body: {
-      type: DataTypes.STRING,
+    dateCreated: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
-   
-    user_id: {
+    userId: {
       type: DataTypes.INTEGER,
       references: {
-        model: "user",
-        key: "id",
+        model: 'user',
+        key: 'id',
       },
-    },
+    },  
   },
   {
     sequelize,
+    timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: "post",
+    modelName: 'post',
   }
 );
 
