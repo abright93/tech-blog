@@ -85,7 +85,7 @@ router.get("/:id", (req, res) => {
   }) 
     .then((dbUserData) => {
       if (!dbUserData) {
-        res.status(404).json({ message: "No User found with this id" });
+        res.status(404).json({ message: "User not found with ID" });
         return;
       }
       res.json(dbUserData);
@@ -109,7 +109,7 @@ router.post("/login", (req, res) => {
       }
       const validPassword = dbUserData.checkPassword(req.body.password);
       if (!validPassword) {
-        res.status(400).json({ message: "Incorrect Password!" });
+        res.status(400).json({ message: "Password is incorrect" });
         return;
       }
       req.session.save(() => {
@@ -133,7 +133,7 @@ router.delete("/:id", (req, res) => {
   })
     .then((dbUserData) => {
       if (!dbUserData) {
-        res.status(404).json({ message: "No User found with this id" });
+        res.status(404).json({ message: "User not found with this ID" });
         return;
       }
       res.json(dbUserData);

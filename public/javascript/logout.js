@@ -1,12 +1,14 @@
-function logout() {
-    fetch("/api/user/logout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" }
-    })
-      .then(function() {
-        document.location.replace("/");
-      })
-      .catch(err => console.log(err));
+async function logout() {
+  const response = await fetch("/api/users/logout", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+  });
+
+  if (response.ok) {
+    document.location.replace("/");
+  } else {
+    alert(response.statusText);
   }
-  
-  document.querySelector("#logout-link").addEventListener("click", logout);
+}
+
+document.querySelector("#logout-btn").addEventListener("click", logout);

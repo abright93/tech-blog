@@ -11,41 +11,28 @@ Post.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    content: {
-      type: DataTypes.STRING(1000),
+    title: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    title: {
-        type: DataTypes.STRING(200),
-        allowNull: false,
-      },
+    body: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+   
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       references: {
-        model: 'user',
-        key: 'id',
+        model: "user",
+        key: "id",
       },
     },
-    comment_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'comment',
-        key: 'id',
-      },
-    },
-    date_created: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-      },
   },
   {
     sequelize,
     freezeTableName: true,
     underscored: true,
-    timestamps: true,
-    modelName: 'post',
+    modelName: "post",
   }
 );
 
